@@ -28,6 +28,7 @@ import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JSlider;
 import javax.swing.JTabbedPane;
 import javax.swing.JTextField;
 
@@ -70,6 +71,7 @@ class RaganDrill
 
 		tab.addTab( "Icon", this.addTabIcon() );
 		tab.addTab( "Image", this.addTabImage() );
+		tab.addTab( "9Patch", this.addTab9Patch() );
 
 		frame.setDropTarget( new DropTarget( frame, imgfiles ) );
 		frame.getContentPane().add( BorderLayout.CENTER, tab );
@@ -118,7 +120,21 @@ class RaganDrill
 
 		return ret;
 	}
-	
+
+	private JPanel addTab9Patch()
+	{
+		JPanel panel = new JPanel();
+		panel.setLayout( new BorderLayout() );
+
+		JPanel imgpanel = new JPanel();
+		imgpanel.setLayout( new BorderLayout() );
+		imgpanel.add( BorderLayout.WEST, new JSlider( JSlider.VERTICAL ) );
+		imgpanel.add( BorderLayout.EAST, new JSlider( JSlider.VERTICAL ) );
+
+		panel.add( BorderLayout.CENTER, imgpanel );
+		return panel;
+	}
+
 	private void addDirButton( JPanel mainpanel, int target )
 	{
 		JTextField field = new JTextField();
