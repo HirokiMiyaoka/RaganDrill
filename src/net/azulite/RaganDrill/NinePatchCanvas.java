@@ -71,14 +71,16 @@ public class NinePatchCanvas extends Canvas implements ChangeListener
 		//g.drawLine(10, 10, 120, 40);
 		g.drawString( "" + slider[ 0 ].getValue() + "+" + slider[ 1 ].getValue() + "+" + slider[ 2 ].getValue() + "+" + slider[ 3 ].getValue(),
 				0, 20 );
+
 		sx = this.getWidth() * slider[ 0 ].getValue() / 100;
 		ex = this.getWidth() * (100-slider[ 1 ].getValue()) / 100 - sx;
 		g.drawRect( sx, 0, ex, 1 );
-		g.drawRect( sx, this.getHeight() - 2, ex, this.getHeight() - 1 );
+		g.drawRect( sx, this.getHeight() - 2, ex, 1 );
+
 		sy = this.getHeight() * slider[ 2 ].getValue() / 100;
 		ey = this.getHeight() * (100-slider[ 3 ].getValue()) / 100 - sy;
 		g.drawRect( 0, sy, 1, ey );
-		g.drawRect( this.getWidth() - 2, sy, this.getWidth() - 1, ey );
+		g.drawRect( this.getWidth() - 2, sy, 1, ey );
 	}
 
 	@Override
