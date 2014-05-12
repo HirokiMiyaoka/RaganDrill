@@ -1,5 +1,9 @@
 package net.azulite.RaganDrill;
 
+/**
+ * GUI Tab base.
+ */
+
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;
 
@@ -9,14 +13,11 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
-/**
- * GUI Tab base.
- */
-
 public class TabIcon extends TabBase
 {
 	private IconFileChooser iconchooser;
 	private IconSelecter iconselecter;
+	private JPanel imgpanel;
 
 	public TabIcon( DropImageFiles imgfiles )
 	{
@@ -39,7 +40,12 @@ public class TabIcon extends TabBase
 
 		this.addOutIcon( panel );
 
+		imgpanel = new JPanel();
+		imgpanel.setLayout( new BorderLayout() );
+		imgpanel.add( BorderLayout.CENTER, new JLabel( "no image." ) );
+
 		mainpanel.add( BorderLayout.NORTH, panel );
+		mainpanel.add( BorderLayout.CENTER, imgpanel );
 		mainpanel.add( BorderLayout.SOUTH, new ConvertButton() );
 
 		return mainpanel;

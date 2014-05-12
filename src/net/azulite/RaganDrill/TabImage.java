@@ -1,5 +1,9 @@
 package net.azulite.RaganDrill;
 
+/**
+ * GUI Tab base.
+ */
+
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;
 
@@ -7,17 +11,15 @@ import javax.swing.BoxLayout;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.JTextField;
-
-/**
- * GUI Tab base.
- */
 
 public class TabImage extends TabBase
 {
 	private ImageFileChooser imgchooser;
 	private JTextField dpi;
 	private DPISelecter dpiselecter;
+	private JScrollPane imgpanel;
 
 	public TabImage( DropImageFiles imgfiles )
 	{
@@ -45,7 +47,11 @@ public class TabImage extends TabBase
 
 		this.addOutDPI( panel );
 
+		panel.add( new JLabel( "Images" ) );
+
+
 		mainpanel.add( BorderLayout.NORTH, panel );
+		mainpanel.add( BorderLayout.CENTER, this.addImagePane() );
 		mainpanel.add( BorderLayout.SOUTH, new ConvertButton() );
 
 		return mainpanel;
@@ -93,5 +99,10 @@ public class TabImage extends TabBase
 		mainpanel.add( panel );
 	}
 
+	protected JScrollPane addImagePane()
+	{
+		imgpanel = new JScrollPane( new JLabel( "no image." ) );
+		return imgpanel;
+	}
 }
 

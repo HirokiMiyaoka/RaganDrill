@@ -1,21 +1,23 @@
 package net.azulite.RaganDrill;
 
+/**
+ * GUI Tab base.
+ */
+
 import java.awt.BorderLayout;
 
 import javax.swing.BoxLayout;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JRadioButton;
 import javax.swing.JTextField;
-
-/**
- * GUI Tab base.
- */
 
 public class Tab9Patch extends TabImage
 {
 	private NinePatchCanvas canvas;
 	private JTextField dpi;
+
 
 	public Tab9Patch( DropImageFiles imgfiles )
 	{
@@ -44,7 +46,12 @@ public class Tab9Patch extends TabImage
 
 		this.addOutDPI( panel );
 
-		panel.add( new JLabel( "9Patch" ) );
+		JPanel titlepanel = new JPanel();
+		titlepanel.setLayout( new BorderLayout() );
+		titlepanel.add( BorderLayout.CENTER, new JLabel( "9Patch" ) );
+		titlepanel.add( BorderLayout.EAST, canvas.getSymmetry() );
+		
+		panel.add( titlepanel );
 
 		JPanel udpanel = new JPanel();
 		udpanel.setLayout( new BorderLayout() );
@@ -60,6 +67,8 @@ public class Tab9Patch extends TabImage
 		lrpanel.add( BorderLayout.CENTER, udpanel );
 
 		mainpanel.add( BorderLayout.CENTER, lrpanel );
+		mainpanel.add( BorderLayout.SOUTH, new ConvertButton() );
+
 		return mainpanel;
 	}
 
