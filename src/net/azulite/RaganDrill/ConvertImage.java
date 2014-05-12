@@ -8,23 +8,17 @@ import java.util.ArrayList;
 
 import javax.imageio.ImageIO;
 
-public class ConvertImage
+public class ConvertImage extends ConvertBase
 {
 	private float dpi;
-	private String docroot;
-	private String dir_android;
-	private String dir_ios;
-	private String delimiter;
 	private ArrayList<OutputOption> dpilist;
 	private ArrayList<String> imglist;
 
 	public ConvertImage()
 	{
+		super();
 		dpi = 160.0f;
-		docroot = ".";
-		dir_android = "res";
-		dir_ios = "ios_res";
-		delimiter = "/";
+
 		dpilist = new ArrayList<OutputOption>();
 		imglist = new ArrayList<String>();
 	}
@@ -36,25 +30,6 @@ public class ConvertImage
 	public void setInputDPI( float newdpi )
 	{
 		dpi = newdpi;
-	}
-
-	/**
-	 * 出力ディレクトリ。
-	 * 出力ディレクトリ以下にres/やios_res/などのディレクトリを生成する。
-	 * @param path 出力ディレクトリ。
-	 */
-	public void setDocumentRoot( String path )
-	{
-		docroot = path;
-	}
-
-	/**
-	 * パスの区切りの設定。
-	 * @param newdelimiter 区切り文字。
-	 */
-	public void setDelimiter( String newdelimiter )
-	{
-		delimiter = newdelimiter;
 	}
 
 	/**
@@ -135,32 +110,3 @@ public class ConvertImage
 	}
 }
 
-class OutputOption
-{
-	private float dpi;
-	private String dir;
-	private boolean iosretina;
-	public OutputOption( float dpi, String output, boolean iosretina )
-	{
-		this.dpi = dpi;
-		dir = output;
-		this.iosretina = iosretina;
-	}
-	public float getDPI(){ return dpi; }
-	public String getDir(){ return dir; }
-	public String getFilePath( String path, String delimiter )
-	{
-		File file = new File( path );
-		String name = file.getName();
-		int pos = name.lastIndexOf( '.' );
-		if ( 0 < pos )
-		{
-			name = name.substring( 0, pos );
-		}
-		if ( iosretina )
-		{
-			name += "@2x";
-		}
-		return dir + delimiter + name + ".png";
-	}
-}

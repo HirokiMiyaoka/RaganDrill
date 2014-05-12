@@ -20,16 +20,22 @@ import javax.swing.JTextField;
 
 class RaganDrill
 {
+	// Main
 	private JFrame frame;
 	private JTabbedPane tab;
+	// Output directory
 	public DirectoryChooser[] dirchooser;
+	// Input image
 	public ImageFileChooser imgchooser;
 	public IconFileChooser iconchooser;
-	public DPISelecter dpiselecter;
-	public IconSelecter iconselecter;
-	public JTextField dpi;
-	public DropImageFiles imgfiles;
 	public NinePatchCanvas canvas;
+	public DropImageFiles imgfiles;
+	// Output DPI
+	public DPISelecter dpiselecter;
+	// Output icon size
+	public IconSelecter iconselecter;
+	// Input DPI
+	public JTextField dpi;
 
 	public static void main (String[] args)
 	{
@@ -122,6 +128,7 @@ class RaganDrill
 		option.add( canvas.getImageFileChooser( frame ) );
 		this.addInDPI( option );
 		this.addOutDPI( option );
+		option.add( new JLabel( "9Patch" ) );
 
 		JPanel udpanel = new JPanel();
 		udpanel.setLayout( new BorderLayout() );

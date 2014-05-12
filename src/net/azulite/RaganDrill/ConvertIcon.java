@@ -8,41 +8,15 @@ import java.util.ArrayList;
 
 import javax.imageio.ImageIO;
 
-public class ConvertIcon
+public class ConvertIcon extends ConvertBase
 {
-	private String docroot;
-	private String dir_android;
-	private String dir_ios;
-	private String delimiter;
 	private ArrayList<Integer> iconlist;
-
 
 	public ConvertIcon()
 	{
-		docroot = ".";
-		dir_android = "res";
-		dir_ios = "ios_res";
-		delimiter = "/";
+		super();
+
 		iconlist = new ArrayList<Integer>();
-	}
-
-	/**
-	 * 出力ディレクトリ。
-	 * 出力ディレクトリ以下にres/やios_res/などのディレクトリを生成する。
-	 * @param path 出力ディレクトリ。
-	 */
-	public void setDocumentRoot( String path )
-	{
-		docroot = path;
-	}
-
-	/**
-	 * パスの区切りの設定。
-	 * @param newdelimiter 区切り文字。
-	 */
-	public void setDelimiter( String newdelimiter )
-	{
-		delimiter = newdelimiter;
 	}
 
 	/**
