@@ -39,7 +39,7 @@ class RaganDrill
 		frame = new JFrame();
 		frame.setDefaultCloseOperation( JFrame.EXIT_ON_CLOSE );
 
-		DropImageFiles imgfiles = new DropImageFiles();
+		DropImageFiles imgfiles = new DropImageFiles( this );
 		
 		tab = new JTabbedPane();
 
@@ -49,7 +49,7 @@ class RaganDrill
 		tabicon = new TabIcon( imgfiles );
 		tabimage = new TabImage( imgfiles );
 		tab9patch = new Tab9Patch( imgfiles );
-		
+
 		tab.addTab( "Icon", tabicon.createTab( frame ) );
 		tab.addTab( "Image", tabimage.createTab( frame ) );
 		tab.addTab( "9Patch", tab9patch.createTab( frame ) );
@@ -65,5 +65,20 @@ class RaganDrill
 		frame.setVisible( true );
 	}
 
+	public void dropAction()
+	{
+		switch ( tab.getSelectedIndex() )
+		{
+		case 0:
+			tabicon.dropAction();
+			break;
+		case 1:
+			tabimage.dropAction();
+			break;
+		case 2:
+			tab9patch.dropAction();
+			break;
+		}
+	}
 }
 

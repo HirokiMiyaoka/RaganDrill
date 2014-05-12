@@ -20,6 +20,13 @@ import java.util.List;
 public class DropImageFiles implements DropTargetListener
 {
 	private ArrayList<String> list;
+	private RaganDrill gui;
+
+	public DropImageFiles( RaganDrill gui )
+	{
+		list = new ArrayList<String>();
+		this.gui = gui;
+	}
 
 	public void add( String str )
 	{
@@ -64,6 +71,7 @@ public class DropImageFiles implements DropTargetListener
 			{
 				throw new RuntimeException(ex);
 			}
+			gui.dropAction();
 		}
 	}
 
@@ -77,6 +85,12 @@ public class DropImageFiles implements DropTargetListener
 	{
 		return (String[])list.toArray();
 	}
+
+	public String getLast()
+	{
+		return list.get( list.size() - 1 );
+	}
+
 	public void reset()
 	{
 		list = new ArrayList<String>();

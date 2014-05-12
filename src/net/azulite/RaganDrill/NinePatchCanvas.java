@@ -7,10 +7,11 @@ package net.azulite.RaganDrill;
 import java.awt.BorderLayout;
 import java.awt.Canvas;
 import java.awt.Graphics;
+import java.awt.image.BufferedImage;
 
+import javax.swing.JCheckBox;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
-import javax.swing.JRadioButton;
 import javax.swing.JSlider;
 import javax.swing.JTextField;
 import javax.swing.event.ChangeEvent;
@@ -21,8 +22,8 @@ public class NinePatchCanvas extends Canvas implements ChangeListener
 {
 	private JSlider[] slider;
 	private ImageFileChooser imgchooser;
-	private DropImageFiles imgfiles;
-	private JRadioButton symmetry;
+	private JCheckBox symmetry;
+	private BufferedImage image;
 
 	public NinePatchCanvas()
 	{
@@ -43,13 +44,13 @@ public class NinePatchCanvas extends Canvas implements ChangeListener
 		slider[ 3 ] = new JSlider( JSlider.VERTICAL );
 		slider[ 3 ].addChangeListener( this );
 
-		imgfiles = new DropImageFiles();
-
-		symmetry = new JRadioButton( "Symmetry" );
+		symmetry = new JCheckBox( "Symmetry" );
 		symmetry.setSelected( true );
+
+		image = null;
 	}
 
-	public JRadioButton getSymmetry()
+	public JCheckBox getSymmetry()
 	{
 		return symmetry;
 	}
@@ -59,7 +60,7 @@ public class NinePatchCanvas extends Canvas implements ChangeListener
 		return slider[ num ];
 	}
 
-	public JPanel getImageFileChooser( JFrame frame )
+	public JPanel getImageFileChooser( JFrame frame, DropImageFiles imgfiles )
 	{
 		JTextField field = new JTextField();
 		imgchooser = new ImageFileChooser( "Image file(PNG)", frame, field, imgfiles );
@@ -78,7 +79,12 @@ public class NinePatchCanvas extends Canvas implements ChangeListener
 	public void paint( Graphics g )
 	{
 		int sx, sy, ex, ey;
-		//g.drawLine(10, 10, 120, 40);
+
+		if ( image != null )
+		{
+			g.drawImage( image, 1, 1, this.getWidth() - 1, this.getHeight() - 1, null );
+		}
+
 		g.drawString( "" + slider[ 0 ].getValue() + "+" + slider[ 1 ].getValue() + "+" + slider[ 2 ].getValue() + "+" + slider[ 3 ].getValue(),
 				0, 20 );
 
@@ -91,6 +97,12 @@ public class NinePatchCanvas extends Canvas implements ChangeListener
 		ey = this.getHeight() * (100-slider[ 3 ].getValue()) / 100 - sy;
 		g.drawRect( 0, sy, 1, ey );
 		g.drawRect( this.getWidth() - 2, sy, 1, ey );
+
+	}
+
+	public void addImage( 	BufferedImage image )
+	{
+		this.image = image;
 	}
 
 	@Override

@@ -104,5 +104,9 @@ public class TabImage extends TabBase
 		imgpanel = new JScrollPane( new JLabel( "no image." ) );
 		return imgpanel;
 	}
+
+	public void dropAction()
+	{
+	}
 }
 

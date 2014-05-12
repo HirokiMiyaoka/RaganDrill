@@ -5,19 +5,22 @@ package net.azulite.RaganDrill;
  */
 
 import java.awt.BorderLayout;
+import java.awt.image.BufferedImage;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 
+import javax.imageio.ImageIO;
 import javax.swing.BoxLayout;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.JRadioButton;
 import javax.swing.JTextField;
 
 public class Tab9Patch extends TabImage
 {
 	private NinePatchCanvas canvas;
 	private JTextField dpi;
-
 
 	public Tab9Patch( DropImageFiles imgfiles )
 	{
@@ -38,7 +41,7 @@ public class Tab9Patch extends TabImage
 		panel.add( this.addDirButton( frame ) );
 
 		panel.add( new JLabel( "Input" ) );
-		panel.add( canvas.getImageFileChooser( frame ) );
+		panel.add( canvas.getImageFileChooser( frame, imgfiles ) );
 
 		dpi = this.addInDPI();
 		panel.add( new JLabel( "InputDPI" ) );
@@ -50,7 +53,7 @@ public class Tab9Patch extends TabImage
 		titlepanel.setLayout( new BorderLayout() );
 		titlepanel.add( BorderLayout.CENTER, new JLabel( "9Patch" ) );
 		titlepanel.add( BorderLayout.EAST, canvas.getSymmetry() );
-		
+
 		panel.add( titlepanel );
 
 		JPanel udpanel = new JPanel();
@@ -74,5 +77,20 @@ public class Tab9Patch extends TabImage
 
 	public void convert()
 	{
+	}
+
+	public void dropAction()
+	{
+		String file = imgfiles.getLast();
+		try
+		{
+			FileInputStream is = new FileInputStream( file );
+			canvas.addImage( ImageIO.read( is ) );
+			canvas.repaint();
+		} catch (FileNotFoundException e)
+		{
+		} catch (IOException e)
+		{
+		}
 	}
 }

@@ -76,4 +76,7 @@ public class TabBase
 		}
 	}
 
+	public void dropAction()
+	{
+	}
 }

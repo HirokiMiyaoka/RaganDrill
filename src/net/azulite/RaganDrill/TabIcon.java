@@ -123,4 +123,8 @@ public class TabIcon extends TabBase
 		panel.add( iconselecter.addItem( IconList.IPAD_7_SMALL_HDPI ) );
 		mainpanel.add( panel );
 	}
+
+	public void dropAction()
+	{
+	}
 }
