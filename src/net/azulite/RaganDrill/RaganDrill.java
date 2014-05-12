@@ -1,34 +1,20 @@
 package net.azulite.RaganDrill;
 
+/**
+ * GUI
+ */
+
 import java.awt.BorderLayout;
-import java.awt.Color;
 import java.awt.FlowLayout;
-import java.awt.datatransfer.DataFlavor;
-import java.awt.datatransfer.Transferable;
-import java.awt.datatransfer.UnsupportedFlavorException;
-import java.awt.dnd.DnDConstants;
 import java.awt.dnd.DropTarget;
-import java.awt.dnd.DropTargetDragEvent;
-import java.awt.dnd.DropTargetDropEvent;
-import java.awt.dnd.DropTargetEvent;
-import java.awt.dnd.DropTargetListener;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.File;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 
 import javax.swing.BoxLayout;
-import javax.swing.InputVerifier;
 import javax.swing.JButton;
-import javax.swing.JCheckBox;
-import javax.swing.JComponent;
-import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.JSlider;
 import javax.swing.JTabbedPane;
 import javax.swing.JTextField;
 
@@ -43,6 +29,7 @@ class RaganDrill
 	public IconSelecter iconselecter;
 	public JTextField dpi;
 	public DropImageFiles imgfiles;
+	public NinePatchCanvas canvas;
 
 	public static void main (String[] args)
 	{
@@ -55,7 +42,7 @@ class RaganDrill
 
 	public RaganDrill()
 	{
-		dirchooser = new DirectoryChooser[ 2 ];
+		dirchooser = new DirectoryChooser[ 3 ];
 	}
 
 	public void InitGUI()
@@ -126,12 +113,30 @@ class RaganDrill
 		JPanel panel = new JPanel();
 		panel.setLayout( new BorderLayout() );
 
-		JPanel imgpanel = new JPanel();
-		imgpanel.setLayout( new BorderLayout() );
-		imgpanel.add( BorderLayout.WEST, new JSlider( JSlider.VERTICAL ) );
-		imgpanel.add( BorderLayout.EAST, new JSlider( JSlider.VERTICAL ) );
+		canvas = new NinePatchCanvas();
 
-		panel.add( BorderLayout.CENTER, imgpanel );
+		JPanel option = new JPanel();
+		option.setLayout( new BoxLayout( option, BoxLayout.Y_AXIS ) );
+		this.addDirButton( option, 2 );
+		option.add( new JLabel( "Input" ) );
+		option.add( canvas.getImageFileChooser( frame ) );
+		this.addInDPI( option );
+		this.addOutDPI( option );
+
+		JPanel udpanel = new JPanel();
+		udpanel.setLayout( new BorderLayout() );
+		udpanel.add( BorderLayout.NORTH, canvas.getSlider( 0 ) );
+		udpanel.add( BorderLayout.SOUTH, canvas.getSlider( 1 ) );
+		udpanel.add( BorderLayout.CENTER, canvas );
+
+		JPanel lrpanel = new JPanel();
+		lrpanel.setLayout( new BorderLayout() );
+		lrpanel.add( BorderLayout.WEST, canvas.getSlider( 2 ) );
+		lrpanel.add( BorderLayout.EAST, canvas.getSlider( 3 ) );
+		lrpanel.add( BorderLayout.NORTH, option );
+		lrpanel.add( BorderLayout.CENTER, udpanel );
+
+		panel.add( BorderLayout.CENTER, lrpanel );
 		return panel;
 	}
 
@@ -295,333 +300,3 @@ class RaganDrill
 	}
 }
 
-@SuppressWarnings("serial")
-class DirectoryChooser extends JButton implements ActionListener
-{
-	private String path;
-	private JTextField field;
-
-	public DirectoryChooser( String str, JFrame frame, JTextField field )
-	{
-		super( str );
-		this.addActionListener( this );
-
-		path = new File( "." ).getAbsolutePath();
-		this.field = field;
-
-		this.printLabel();
-	}
-	private void printLabel()
-	{
-		field.setText( path );
-	}
-
-	public String getPath()
-	{
-		return path;
-	}
-
-	@Override
-	public void actionPerformed(ActionEvent arg0)
-	{
-		JFileChooser dirchooser = new JFileChooser();
-		dirchooser.setFileSelectionMode( JFileChooser.DIRECTORIES_ONLY );
-
-		int selected = dirchooser.showOpenDialog( this );
-		if ( selected == JFileChooser.APPROVE_OPTION )
-		{
-			File file = dirchooser.getSelectedFile();
-			path = file.getPath();
-			this.printLabel();
-		}else if (selected == JFileChooser.CANCEL_OPTION)
-		{
-			// Cancel
-		}else if (selected == JFileChooser.ERROR_OPTION)
-		{
-			// Error?
-		}
-	}
-}
-
-@SuppressWarnings("serial")
-class ImageFileChooser extends JButton implements ActionListener
-{
-	private String path;
-	private JTextField field;
-	private DropImageFiles drop;
-
-	public ImageFileChooser( String str, JFrame frame, JTextField field, DropImageFiles drop )
-	{
-		super( str );
-		this.addActionListener( this );
-
-		path = "";
-		this.field = field;
-		this.drop = drop;
-
-		this.printLabel();
-	}
-
-	private void printLabel()
-	{
-		field.setText( path );
-	}
-
-	public String getPath()
-	{
-		return path;
-	}
-
-	@Override
-	public void actionPerformed(ActionEvent arg0)
-	{
-		JFileChooser dirchooser = new JFileChooser();
-		dirchooser.setFileSelectionMode( JFileChooser.FILES_ONLY );
-		// TODO: PNG Filter.
-
-		int selected = dirchooser.showOpenDialog( this );
-		if ( selected == JFileChooser.APPROVE_OPTION )
-		{
-			File file = dirchooser.getSelectedFile();
-			path = file.getPath();
-			this.printLabel();
-			drop.add( path );
-		}else if (selected == JFileChooser.CANCEL_OPTION)
-		{
-			// Cancel
-		}else if (selected == JFileChooser.ERROR_OPTION)
-		{
-			// Error?
-		}
-	}
-
-}
-
-@SuppressWarnings("serial")
-class IconFileChooser extends JButton implements ActionListener
-{
-	private String path;
-	private JTextField field;
-
-	public IconFileChooser( String str, JFrame frame, JTextField field )
-	{
-		super( str );
-		this.addActionListener( this );
-
-		path = "";
-		this.field = field;
-
-		this.printLabel();
-	}
-
-	private void printLabel()
-	{
-		field.setText( path );
-	}
-
-	public String getPath()
-	{
-		return path;
-	}
-
-	@Override
-	public void actionPerformed(ActionEvent arg0)
-	{
-		JFileChooser dirchooser = new JFileChooser();
-		dirchooser.setFileSelectionMode( JFileChooser.FILES_ONLY );
-		// TODO: PNG Filter.
-
-		int selected = dirchooser.showOpenDialog( this );
-		if ( selected == JFileChooser.APPROVE_OPTION )
-		{
-			File file = dirchooser.getSelectedFile();
-			path = file.getPath();
-			this.printLabel();
-		}else if (selected == JFileChooser.CANCEL_OPTION)
-		{
-			// Cancel
-		}else if (selected == JFileChooser.ERROR_OPTION)
-		{
-			// Error?
-		}
-	}
-}
-
-class DropImageFiles implements DropTargetListener
-{
-	private ArrayList<String> list;
-
-	public void add( String str )
-	{
-		list.add( str );
-	}
-
-	@Override
-	public void dragEnter(DropTargetDragEvent arg0)
-	{
-		
-	}
-	@Override
-	public void dragExit(DropTargetEvent arg0)
-	{
-		
-	}
-	@Override
-	public void dragOver(DropTargetDragEvent arg0)
-	{
-		
-	}
-
-	@Override
-	public void drop(DropTargetDropEvent arg0)
-	{
-		Transferable t = arg0.getTransferable();
-		if ( t.isDataFlavorSupported( DataFlavor.javaFileListFlavor ) )
-		{
-			arg0.acceptDrop( DnDConstants.ACTION_COPY_OR_MOVE );
-			try
-			{
-				@SuppressWarnings( "unchecked" )
-				List<File> fileList = (List<File>)t.getTransferData( DataFlavor.javaFileListFlavor );
-				for (File file : fileList)
-				{
-					list.add( file.getPath() );
-				}
-			} catch ( UnsupportedFlavorException ex )
-			{
-				throw new RuntimeException( ex );
-			} catch ( IOException ex )
-			{
-				throw new RuntimeException(ex);
-			}
-		}
-	}
-
-	@Override
-	public void dropActionChanged(DropTargetDragEvent arg0)
-	{
-		
-	}
-
-	public String[] get()
-	{
-		return (String[])list.toArray();
-	}
-	public void reset()
-	{
-		list = new ArrayList<String>();
-	}
-
-}
-
-class IntegerInputVerifier extends InputVerifier
-{
-	@Override
-	public boolean verify( JComponent c )
-	{
-		boolean verified = false;
-		JTextField textField = (JTextField)c;
-		try
-		{
-			Float.parseFloat( textField.getText() );
-			verified = true;
-			c.setBackground( Color.white );
-		}catch( NumberFormatException e )
-		{
-			c.setBackground( Color.pink );
-		}
-		
-		return verified;
-	}
-}
-
-class DPISelecter
-{
-	private ArrayList<JCheckBox> clist;
-	private ArrayList<Integer> tlist;
-
-	public DPISelecter()
-	{
-		clist = new ArrayList<JCheckBox>();
-		tlist = new ArrayList<Integer>();
-	}
-
-	public JCheckBox addItem( int type )
-	{
-		JCheckBox checkbox = new JCheckBox( DPIList.getDPIName( type ) );
-		checkbox.setSelected( true );
-		clist.add( checkbox );
-		tlist.add( type );
-
-		return checkbox;
-	}
-
-	public int[] get( boolean target )
-	{
-		int i;
-		ArrayList<Integer> list = new ArrayList<Integer>();
-		for ( i = 0 ; i < clist.size() ; ++i )
-		{
-			if ( clist.get( i ).isSelected() )
-			{
-				list.add( tlist.get( i ) );
-			}
-		}
-
-		if ( list.size() <= 0 ){ return new int[ 0 ]; }
-
-		int[] ret = new int[ list.size() ];
-		for ( i = 0 ; i < list.size() ; ++i )
-		{
-			ret[ i ] = list.get( i );
-		}
-
-		return ret;
-	}
-}
-
-class IconSelecter
-{
-	private ArrayList<JCheckBox> clist;
-	private ArrayList<Integer> tlist;
-
-	public IconSelecter()
-	{
-		clist = new ArrayList<JCheckBox>();
-		tlist = new ArrayList<Integer>();
-	}
-
-	public JCheckBox addItem( int type )
-	{
-		JCheckBox checkbox = new JCheckBox( IconList.getIconName( type ) );
-		checkbox.setSelected( true );
-		clist.add( checkbox );
-		tlist.add( type );
-
-		return checkbox;
-	}
-
-	public int[] get( boolean target )
-	{
-		int i;
-		ArrayList<Integer> list = new ArrayList<Integer>();
-
-		for ( i = 0 ; i < clist.size() ; ++i )
-		{
-			if ( clist.get( i ).isSelected() )
-			{
-				list.add( tlist.get( i ) );
-			}
-		}
-
-		if ( list.size() <= 0 ){ return new int[ 0 ]; }
-
-		int[] ret = new int[ list.size() ];
-		for ( i = 0 ; i < list.size() ; ++i )
-		{
-			ret[ i ] = list.get( i );
-		}
-
-		return ret;
-	}
-}

@@ -1,5 +1,9 @@
 package net.azulite.RaganDrill;
 
+/**
+ * DPI list for Android & iOS.
+ */
+
 public class DPIList
 {
 	static final int ANDROID_LDPI   = 10;
